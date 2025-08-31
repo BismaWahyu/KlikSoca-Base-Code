@@ -1,6 +1,7 @@
 from flask import Flask, request, jsonify
 from flask_socketio import SocketIO, emit
 from pymongo import MongoClient
+from bson.objectid import ObjectId
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'secret!'
@@ -32,35 +33,45 @@ def get_users():
 # Endpoint untuk membaca satu user berdasarkan ID (Read)
 @app.route('/users/<id>', methods=['GET'])
 def get_user(id):
-    user = collection.find_one({'_id': id})
-    if user:
-        return jsonify({'id': str(user['_id']), 'name': user['name'], 'email': user['email']})
-    else:
-        return jsonify({'message': 'User not found!'}), 404
+    try:
+        user = collection.find_one({'_id': ObjectId(id)})
+        if user:
+            return jsonify({'id': str(user['_id']), 'name': user['name'], 'email': user['email']})
+        else:
+            return jsonify({'message': 'User not found!'}), 404
+    except Exception:
+        return jsonify({'message': 'Invalid ID format!'}), 400
+
 
 # Endpoint untuk mengupdate user (Update)
 @app.route('/users/<id>', methods=['PUT'])
 def update_user(id):
-    data = request.get_json()
-    updated_user = {'name': data['name'], 'email': data['email']}
-    result = collection.update_one({'_id': id}, {'$set': updated_user})
-    if result.modified_count > 0:
-        # Broadcast ke semua client bahwa ada user yang diupdate
-        socketio.emit('updated_user', {'id': id, 'name': updated_user['name'], 'email': updated_user['email']})
-        return jsonify({'message': 'User updated successfully!'})
-    else:
-        return jsonify({'message': 'User not found!'}), 404
+    try:
+        data = request.get_json()
+        updated_user = {'name': data['name'], 'email': data['email']}
+        result = collection.update_one({'_id': ObjectId(id)}, {'$set': updated_user})
+        if result.modified_count > 0:
+            # Broadcast ke semua client bahwa ada user yang diupdate
+            socketio.emit('updated_user', {'id': id, 'name': updated_user['name'], 'email': updated_user['email']})
+            return jsonify({'message': 'User updated successfully!'})
+        else:
+            return jsonify({'message': 'User not found!'}), 404
+    except Exception:
+        return jsonify({'message': 'Invalid ID format!'}), 400
 
 # Endpoint untuk menghapus user (Delete)
 @app.route('/users/<id>', methods=['DELETE'])
 def delete_user(id):
-    result = collection.delete_one({'_id': id})
-    if result.deleted_count > 0:
-        # Broadcast ke semua client bahwa ada user yang dihapus
-        socketio.emit('deleted_user', {'id': id})
-        return jsonify({'message': 'User deleted successfully!'})
-    else:
-        return jsonify({'message': 'User not found!'}), 404
+    try:
+        result = collection.delete_one({'_id': ObjectId(id)})
+        if result.deleted_count > 0:
+            # Broadcast ke semua client bahwa ada user yang dihapus
+            socketio.emit('deleted_user', {'id': id})
+            return jsonify({'message': 'User deleted successfully!'})
+        else:
+            return jsonify({'message': 'User not found!'}), 404
+    except Exception:
+        return jsonify({'message': 'Invalid ID format!'}), 400
 
 # Event handler untuk koneksi client
 @socketio.on('connect')
