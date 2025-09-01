@@ -2,6 +2,50 @@
 
 This is a simple CRUD API built with Flask, using MongoDB as the database and Socket.IO for real-time broadcasting of changes to all connected clients.
 
+## How to Run the Application
+
+This project is divided into two parts: a Flask backend and a Vue.js frontend. You need to run both simultaneously.
+
+### Backend (Flask)
+
+1.  **Navigate to the backend directory:**
+    ```bash
+    cd backend
+    ```
+
+2.  **Install the Python dependencies:**
+    ```bash
+    pip install -r requirements.txt
+    ```
+
+3.  **Run the Flask application:**
+    ```bash
+    python app.py
+    ```
+    The backend server will start on `http://localhost:5000`.
+
+### Frontend (Vue.js)
+
+1.  **Open a new terminal window.**
+
+2.  **Navigate to the frontend directory:**
+    ```bash
+    cd frontend
+    ```
+
+3.  **Install the Node.js dependencies:**
+    ```bash
+    npm install
+    ```
+
+4.  **Run the Vue.js development server:**
+    ```bash
+    npm run dev
+    ```
+    The frontend development server will start on a port, typically `http://localhost:5173`.
+
+5.  **Open your browser** and navigate to the address provided by the frontend server (e.g., `http://localhost:5173`) to use the application.
+
 ## REST API Endpoints
 
 ### 1. Create a New User
