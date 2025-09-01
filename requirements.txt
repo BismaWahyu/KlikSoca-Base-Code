@@ -1,4 +1,5 @@
 Flask
 Flask-SocketIO
 pymongo
-eventlet
+Flask-Swagger-UI
+Flask-Cors

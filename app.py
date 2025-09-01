@@ -2,10 +2,30 @@ from flask import Flask, request, jsonify, render_template
 from flask_socketio import SocketIO, emit
 from pymongo import MongoClient
 from bson.objectid import ObjectId
+from flask_swagger_ui import get_swaggerui_blueprint
+from flask_cors import CORS
 
 app = Flask(__name__)
+
+# --- Konfigurasi Swagger UI ---
+SWAGGER_URL = '/docs'  # URL untuk mengakses UI Swagger
+API_URL = '/static/openapi.yaml'  # Path ke file openapi.yaml Anda
+
+# Panggil factory untuk membuat blueprint Swagger UI
+swaggerui_blueprint = get_swaggerui_blueprint(
+    SWAGGER_URL,
+    API_URL,
+    config={
+        'app_name': "Flask Real-time API"
+    }
+)
+
+app.register_blueprint(swaggerui_blueprint, url_prefix=SWAGGER_URL)
+
+# --- Konfigurasi Lainnya ---
 app.config['SECRET_KEY'] = 'secret!'
-socketio = SocketIO(app)
+socketio = SocketIO(app, cors_allowed_origins="*") # Izinkan semua origin untuk Socket.IO
+CORS(app) # Aktifkan CORS untuk semua rute Flask
 
 # Koneksi ke MongoDB
 client = MongoClient('mongodb://localhost:27017/')
