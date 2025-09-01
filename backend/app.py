@@ -24,8 +24,8 @@ app.register_blueprint(swaggerui_blueprint, url_prefix=SWAGGER_URL)
 
 # --- Konfigurasi Lainnya ---
 app.config['SECRET_KEY'] = 'secret!'
-socketio = SocketIO(app, cors_allowed_origins="*") 
-CORS(app, resources={r"/*": {"origins": "*"}}) # Aktifkan CORS untuk semua rute Flask
+socketio = SocketIO(app, cors_allowed_origins="*")
+CORS(app, resources={r"/*": {"origins": "*"}})
 
 # Koneksi ke MongoDB
 client = MongoClient('mongodb://localhost:27017/')
@@ -120,4 +120,4 @@ def handle_add_song(data):
     emit('new_song', {'id': str(result.inserted_id), 'title': new_song['title'], 'artist': new_song['artist']}, broadcast=True)
 
 if __name__ == '__main__':
-    socketio.run(app, debug=True)
+    socketio.run(app, debug=True, host='0.0.0.0')
