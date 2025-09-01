@@ -2,6 +2,12 @@
 
 This is a simple CRUD API built with Flask, using MongoDB as the database and Socket.IO for real-time broadcasting of changes to all connected clients.
 
+## Accessing the API Documentation (Swagger UI)
+
+Once the backend server is running, you can access the Swagger UI to view the API documentation and test the endpoints.
+
+*   **URL:** [http://localhost:5000/docs](http://localhost:5000/docs)
+
 ## How to Run the Application
 
 This project is divided into two parts: a Flask backend and a Vue.js frontend. You need to run both simultaneously.
