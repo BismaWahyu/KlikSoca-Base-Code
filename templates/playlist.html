@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Real-time Playlist</title>
+</head>
+<body>
+    <h1>Playlist</h1>
+    <ul id="playlist"></ul>
+
+    <h2>Add Song</h2>
+    <form id="add-song-form">
+        <input type="text" id="song-title" placeholder="Song Title" required>
+        <input type="text" id="artist" placeholder="Artist" required>
+        <button type="submit">Add Song</button>
+    </form>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.5.2/socket.io.js"></script>
+    <script>
+        const socket = io();
+
+        // Function to fetch initial playlist
+        function fetchPlaylist() {
+            fetch('/playlist/songs')
+                .then(response => response.json())
+                .then(data => {
+                    const playlist = document.getElementById('playlist');
+                    playlist.innerHTML = '';
+                    data.forEach(song => {
+                        const li = document.createElement('li');
+                        li.textContent = `${song.title} - ${song.artist}`;
+                        li.id = `song-${song.id}`;
+                        playlist.appendChild(li);
+                    });
+                });
+        }
+
+        // Add song form submission
+        document.getElementById('add-song-form').addEventListener('submit', (e) => {
+            e.preventDefault();
+            const titleInput = document.getElementById('song-title');
+            const artistInput = document.getElementById('artist');
+            
+            const song = {
+                title: titleInput.value,
+                artist: artistInput.value
+            };
+
+            socket.emit('add_song', song);
+
+            titleInput.value = '';
+            artistInput.value = '';
+        });
+
+        // Socket.IO event listener for new song
+        socket.on('new_song', (data) => {
+            const playlist = document.getElementById('playlist');
+            const li = document.createElement('li');
+            li.textContent = `${data.title} - ${data.artist}`;
+            li.id = `song-${data.id}`;
+            playlist.appendChild(li);
+        });
+
+        // Initial fetch of playlist
+        fetchPlaylist();
+    </script>
+</body>
+</html>
