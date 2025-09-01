@@ -25,7 +25,7 @@ This project is divided into two parts: a Flask backend and a Vue.js frontend. Y
 
     ````bash
     workon kliksoca
-    ```    ```
+    ```
 
     ````
 
