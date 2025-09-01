@@ -85,6 +85,10 @@
       </Card>
     </div>
 
+    <!-- Notification -->
+    <div v-if="showNotification" class="notification">
+      {{ notificationMessage }}
+    </div>
   </div>
 </template>
 
@@ -113,6 +117,10 @@ const form = ref({ id: '', name: '', email: '' });
 // Playlist state
 const playlist = ref<any[]>([]);
 const songForm = ref({ title: '', artist: '' });
+
+// Notification state
+const showNotification = ref(false);
+const notificationMessage = ref('');
 
 // Fetch initial data
 const fetchUsers = async () => {
@@ -182,6 +190,29 @@ onMounted(() => {
 
   socket.on('new_song', (song: any) => {
     playlist.value.push(song);
+
+    // Show notification
+    notificationMessage.value = `New song added: ${song.title} by ${song.artist}`;
+    showNotification.value = true;
+
+    // Hide notification after 3 seconds
+    setTimeout(() => {
+      showNotification.value = false;
+    }, 3000);
   });
 });
 </script>
+
+<style scoped>
+.notification {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  background-color: #42b983;
+  color: white;
+  padding: 15px;
+  border-radius: 5px;
+  z-index: 1000;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
+</style>
