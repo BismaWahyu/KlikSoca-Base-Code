@@ -120,4 +120,4 @@ def handle_add_song(data):
     emit('new_song', {'id': str(result.inserted_id), 'title': new_song['title'], 'artist': new_song['artist']}, broadcast=True)
 
 if __name__ == '__main__':
-    socketio.run(app, debug=True, host='0.0.0.0')
+    socketio.run(app, debug=True, host='0.0.0.0', port=5000)
