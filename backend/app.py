@@ -24,8 +24,8 @@ app.register_blueprint(swaggerui_blueprint, url_prefix=SWAGGER_URL)
 
 # --- Konfigurasi Lainnya ---
 app.config['SECRET_KEY'] = 'secret!'
-socketio = SocketIO(app, cors_allowed_origins="*") # Izinkan semua origin untuk Socket.IO
-CORS(app) # Aktifkan CORS untuk semua rute Flask
+socketio = SocketIO(app, cors_allowed_origins="*") 
+CORS(app, resources={r"/*": {"origins": "*"}}) # Aktifkan CORS untuk semua rute Flask
 
 # Koneksi ke MongoDB
 client = MongoClient('mongodb://localhost:27017/')
