@@ -6,7 +6,7 @@ This is a simple CRUD API built with Flask, using MongoDB as the database and So
 
 Once the backend server is running, you can access the Swagger UI to view the API documentation and test the endpoints.
 
-*   **URL:** [http://localhost:5000/docs](http://localhost:5000/docs)
+-   **URL:** [http://localhost:5000/docs](http://localhost:5000/docs)
 
 ## How to Run the Application
 
@@ -15,16 +15,27 @@ This project is divided into two parts: a Flask backend and a Vue.js frontend. Y
 ### Backend (Flask)
 
 1.  **Navigate to the backend directory:**
+
     ```bash
     cd backend
+
     ```
 
-2.  **Install the Python dependencies:**
+2.  **Using virtual environment (depends on your OS):**
+
+    ````bash
+    workon kliksoca
+    ```    ```
+
+    ````
+
+3.  **Install the Python dependencies:**
+
     ```bash
     pip install -r requirements.txt
     ```
 
-3.  **Run the Flask application:**
+4.  **Run the Flask application:**
     ```bash
     python app.py
     ```
@@ -35,19 +46,23 @@ This project is divided into two parts: a Flask backend and a Vue.js frontend. Y
 1.  **Open a new terminal window.**
 
 2.  **Navigate to the frontend directory:**
+
     ```bash
     cd frontend
     ```
 
 3.  **Install the Node.js dependencies:**
+
     ```bash
     npm install
     ```
 
 4.  **Run the Vue.js development server:**
+
     ```bash
     npm run dev
     ```
+
     The frontend development server will start on a port, typically `http://localhost:5173`.
 
 5.  **Open your browser** and navigate to the address provided by the frontend server (e.g., `http://localhost:5173`) to use the application.
@@ -56,8 +71,8 @@ This project is divided into two parts: a Flask backend and a Vue.js frontend. Y
 
 ### 1. Create a New User
 
-* **Endpoint:** `POST /users`
-* **Description:** Creates a new user in the database.
+-   **Endpoint:** `POST /users`
+-   **Description:** Creates a new user in the database.
 
 **Example Request Body (JSON):**
 
@@ -79,8 +94,8 @@ This project is divided into two parts: a Flask backend and a Vue.js frontend. Y
 
 ### 2. Get All Users
 
-* **Endpoint:** `GET /users`
-* **Description:** Retrieves a list of all users from the database.
+-   **Endpoint:** `GET /users`
+-   **Description:** Retrieves a list of all users from the database.
 
 **Example Success Response (200 OK):**
 
@@ -101,8 +116,8 @@ This project is divided into two parts: a Flask backend and a Vue.js frontend. Y
 
 ### 3. Get a Single User by ID
 
-* **Endpoint:** `GET /users/<id>`
-* **Description:** Retrieves a single user by their unique ID.
+-   **Endpoint:** `GET /users/<id>`
+-   **Description:** Retrieves a single user by their unique ID.
 
 **Example Success Response (200 OK):**
 
@@ -124,8 +139,8 @@ This project is divided into two parts: a Flask backend and a Vue.js frontend. Y
 
 ### 4. Update a User
 
-* **Endpoint:** `PUT /users/<id>`
-* **Description:** Updates an existing user's information.
+-   **Endpoint:** `PUT /users/<id>`
+-   **Description:** Updates an existing user's information.
 
 **Example Request Body (JSON):**
 
@@ -154,8 +169,8 @@ This project is divided into two parts: a Flask backend and a Vue.js frontend. Y
 
 ### 5. Delete a User
 
-* **Endpoint:** `DELETE /users/<id>`
-* **Description:** Deletes a user from the database.
+-   **Endpoint:** `DELETE /users/<id>`
+-   **Description:** Deletes a user from the database.
 
 **Example Success Response (200 OK):**
 
@@ -177,11 +192,11 @@ This project is divided into two parts: a Flask backend and a Vue.js frontend. Y
 
 The application uses Socket.IO to broadcast changes to all connected clients. Here is the flow of events:
 
-*   `connect`: Triggered when a new client connects to the server.
-*   `disconnect`: Triggered when a client disconnects from the server.
-*   `new_user`: Broadcasted when a new user is created via the `POST /users` endpoint. The message contains the new user's data.
-*   `updated_user`: Broadcasted when a user is updated via the `PUT /users/<id>` endpoint. The message contains the updated user's data.
-*   `deleted_user`: Broadcasted when a user is deleted via the `DELETE /users/<id>` endpoint. The message contains the ID of the deleted user.
+-   `connect`: Triggered when a new client connects to the server.
+-   `disconnect`: Triggered when a client disconnects from the server.
+-   `new_user`: Broadcasted when a new user is created via the `POST /users` endpoint. The message contains the new user's data.
+-   `updated_user`: Broadcasted when a user is updated via the `PUT /users/<id>` endpoint. The message contains the updated user's data.
+-   `deleted_user`: Broadcasted when a user is deleted via the `DELETE /users/<id>` endpoint. The message contains the ID of the deleted user.
 
 ## MongoDB Connection Configuration
 
