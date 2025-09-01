@@ -1,43 +1,108 @@
 <template>
-  <div id="app">
+  <div id="app" class="w-full flex gap-3 p-6">
     <!-- Users Section -->
-    <div class="users-container">
-      <h2>Users</h2>
-      <ul id="user-list">
-        <li v-for="user in users" :key="user.id">
-          {{ user.name }} ({{ user.email }})
-          <button @click="editUser(user)">Edit</button>
-          <button @click="deleteUser(user.id)">Delete</button>
-        </li>
-      </ul>
-      <form @submit.prevent="createUser" class="user-form">
-        <input type="hidden" v-model="form.id">
-        <input type="text" v-model="form.name" placeholder="Name" required>
-        <input type="email" v-model="form.email" placeholder="Email" required>
-        <button type="submit">{{ form.id ? 'Update User' : 'Create User' }}</button>
-      </form>
+    <div class="w-1/2 drop-shadow">
+      <Card>
+        <CardHeader>
+          <CardTitle>User Management</CardTitle>
+          <CardDescription>Manage all users here</CardDescription>
+        </CardHeader>
+        <CardContent>
+          <Card class="p-3">
+            <ul id="user-list">
+              <li v-for="user in users" :key="user.id">
+                <div class="flex justify-between mb-3 items-center">
+                  <div class="flex-col flex">
+                    <span class="text-lg font-semibold">
+                      {{ user.name }} 
+                    </span>
+                    <span class="text-zinc-500">({{ user.email }})</span>
+                  </div>
+                  <div class="flex justify-between gap-2">
+                    <Button @click="editUser(user)" class="bg-blue-500 hover:bg-blue-600 text-white cursor-pointer">
+                      <Pen />
+                    </Button>
+                    <Button @click="deleteUser(user.id)" class="bg-red-500 hover:bg-red-600 text-white cursor-pointer">
+                      <Trash />
+                    </Button>
+                  </div>
+                </div>
+              </li>
+            </ul>
+          </Card>
+        </CardContent>
+        <CardFooter class="flex gap-2 justify-between items-end">
+          <div class="flex flex-col gap-2">
+            <Label>Name</Label>
+            <Input v-model="form.name" required type="text" placeholder="type your name..." />
+          </div>
+          <div class="flex flex-col gap-2">
+            <Label>Email</Label>
+            <Input v-model="form.email" required type="email" placeholder="type your email..." />
+          </div>
+          <div>
+            <Button class="bg-green-500 text-white hover:bg-green-600 cursor-pointer" @click="createUser">Submit</Button>
+          </div>
+        </CardFooter>
+      </Card>
     </div>
 
-    <!-- Playlist Section -->
-    <div class="playlist-container">
-      <h2>Playlist</h2>
-      <ul id="playlist">
-        <li v-for="song in playlist" :key="song.id">
-          {{ song.title }} - {{ song.artist }}
-        </li>
-      </ul>
-      <form @submit.prevent="addSong" class="song-form">
-        <input type="text" v-model="songForm.title" placeholder="Song Title" required>
-        <input type="text" v-model="songForm.artist" placeholder="Artist" required>
-        <button type="submit">Add Song</button>
-      </form>
+    <div class="w-1/2 drop-shadow">
+      <Card>
+        <CardHeader>
+          <CardTitle>Playlist Management</CardTitle>
+          <CardDescription>Manage current playlist here</CardDescription>
+        </CardHeader>
+        <CardContent>
+          <Card class="p-3">
+            <ul id="playlist">
+              <li v-for="song in playlist" :key="song.id">
+                <div class="flex justify-between mb-3 items-center">
+                  <div class="flex-col flex">
+                    <span class="text-lg font-semibold">
+                      {{ song.title }} 
+                    </span>
+                    <span class="text-zinc-500">({{ song.artist }})</span>
+                  </div>
+                </div>
+              </li>
+            </ul>
+          </Card>
+        </CardContent>
+        <CardFooter class="flex gap-2 justify-between items-end">
+          <div class="flex flex-col gap-2">
+            <Label>Song Title</Label>
+            <Input v-model="songForm.title" required type="text" placeholder="Title here..." />
+          </div>
+          <div class="flex flex-col gap-2">
+            <Label>Artist</Label>
+            <Input v-model="songForm.artist" required type="text" placeholder="Artist here..." />
+          </div>
+          <div>
+            <Button class="bg-green-500 text-white hover:bg-green-600 cursor-pointer" @click="addSong">Add Song</Button>
+          </div>
+        </CardFooter>
+      </Card>
     </div>
+
   </div>
 </template>
 
 <script setup lang="ts">
 import { ref, onMounted } from 'vue';
 import io from 'socket.io-client';
+import { Trash, Pen } from 'lucide-vue-next';
+import { 
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle
+} from './components/ui/card';
+import { Button } from './components/ui/button';
+import { Label } from './components/ui/label'
+import { Input } from './components/ui/input';
 
 const socket = io('http://localhost:5000');
 
@@ -69,6 +134,7 @@ const createUser = async () => {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ name: form.value.name, email: form.value.email }),
     });
+
   } else {
     // Create user
     await fetch('http://localhost:5000/users', {
@@ -77,7 +143,7 @@ const createUser = async () => {
       body: JSON.stringify({ name: form.value.name, email: form.value.email }),
     });
   }
-  form.value = { id: '', name: '', email: '' }; // Reset form
+  form.value = { id: '', name: '', email: '' };
 };
 
 const editUser = (user: any) => {
@@ -119,65 +185,3 @@ onMounted(() => {
   });
 });
 </script>
-
-<style>
-#app {
-  display: flex;
-  justify-content: space-around;
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  color: #2c3e50;
-  margin-top: 60px;
-}
-
-.users-container, .playlist-container {
-  width: 45%;
-  border: 1px solid #ccc;
-  padding: 20px;
-  border-radius: 8px;
-}
-
-h2 {
-  text-align: center;
-}
-
-ul {
-  list-style-type: none;
-  padding: 0;
-}
-
-li {
-  padding: 8px;
-  margin-bottom: 8px;
-  background-color: #f9f9f9;
-  border-radius: 4px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.user-form, .song-form {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  margin-top: 20px;
-}
-
-input {
-  padding: 8px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-}
-
-button {
-  padding: 10px;
-  background-color: #42b983;
-  color: white;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-}
-
-button:hover {
-  background-color: #369f6e;
-}
-</style>
