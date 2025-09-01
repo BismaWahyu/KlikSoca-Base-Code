@@ -1,4 +1,4 @@
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, render_template
 from flask_socketio import SocketIO, emit
 from pymongo import MongoClient
 from bson.objectid import ObjectId
@@ -11,6 +11,10 @@ socketio = SocketIO(app)
 client = MongoClient('mongodb://localhost:27017/')
 db = client['flask_db']
 collection = db['users']
+
+@app.route('/')
+def index():
+    return render_template('index.html')
 
 # Endpoint untuk membuat user baru (Create)
 @app.route('/users', methods=['POST'])
